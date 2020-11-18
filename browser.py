@@ -37,28 +37,33 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 # write your code here
 import os
 
-dirName = input()
-
-try:
-    # Create target Directory
-    os.mkdir(dirName)
-except FileExistsError:
-    pass
-
 while True:
     user_input = input()
-    if user_input.count(".") > 0:
-        if user_input == "bloomberg.com":
-            print(bloomberg_com)
-            with open(dirName + "/" + user_input.rstrip(".com") + ".txt", "w") as f:
-                f.write(bloomberg_com)
-        elif user_input == "nytimes.com":
-            print(nytimes_com)
-            with open(dirName + "/" + user_input.rstrip(".com") + ".txt", "w") as f:
-                f.write(nytimes_com)
-        elif user_input == "exit":
-            break
-        else:
-            print("Error: unknown URL")
+    if "dir" in user_input:
+        dirName = user_input.split()[1]
+        try:
+            # Create target Directory
+            os.mkdir(dirName)
+        except FileExistsError:
+            pass
     else:
-        print("Error: unknown URL")
+        try:
+            # Create target Directory
+            os.mkdir("tb_tabs")
+        except FileExistsError:
+            pass
+    if user_input.count(".") > 0:
+        if user_input.rstrip(".com") == "bloomberg":
+            with open("./tb_tabs/" + user_input.rstrip(".com"), "w") as f:
+                print(bloomberg_com)
+                f.write(bloomberg_com)
+        elif user_input.rstrip(".com") == "nytimes":
+            with open("./tb_tabs/" + user_input.rstrip(".com"), "w") as f:
+                print(nytimes_com)
+                f.write(nytimes_com)
+        else:
+            print("Error: Unknown URL")
+    elif user_input == "exit":
+        break
+    else:
+        print("Error: Invalid URL")
