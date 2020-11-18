@@ -47,9 +47,12 @@ except FileExistsError:
 
 while True:
     user_input = input()
-    if user_input == "bloomberg.com":
-        print(bloomberg_com)
-    elif user_input == "nytimes.com":
-        print(nytimes_com)
-    elif user_input == "exit":
-        break
+    if user_input.count(".") > 0:
+        if user_input == "bloomberg.com":
+            print(bloomberg_com)
+        elif user_input == "nytimes.com":
+            print(nytimes_com)
+        elif user_input == "exit":
+            break
+    else:
+        print("Error: unknown URL")
