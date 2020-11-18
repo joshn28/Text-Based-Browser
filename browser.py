@@ -50,9 +50,15 @@ while True:
     if user_input.count(".") > 0:
         if user_input == "bloomberg.com":
             print(bloomberg_com)
+            with open(dirName + "/" + user_input.rstrip(".com") + ".txt", "w") as f:
+                f.write(bloomberg_com)
         elif user_input == "nytimes.com":
             print(nytimes_com)
+            with open(dirName + "/" + user_input.rstrip(".com") + ".txt", "w") as f:
+                f.write(nytimes_com)
         elif user_input == "exit":
             break
+        else:
+            print("Error: unknown URL")
     else:
         print("Error: unknown URL")
