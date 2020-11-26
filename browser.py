@@ -54,8 +54,10 @@ current_page = ""
 
 while True:
     user_input = input()
+    folder = "tb_tabs"
     if "dir" in user_input:
         createNewFolder(user_input.split()[1])
+        folder = user_input.split()[1]
     else:
         createNewFolder()
     if user_input.count(".") > 0:
@@ -65,7 +67,7 @@ while True:
             else:
                 stack.append(current_page)
                 current_page = bloomberg_com
-            with open("./tb_tabs/" + user_input.rstrip(".com"), "w") as f:
+            with open("./{}/".format(folder) + user_input.rstrip(".com"), "w") as f:
                 print(bloomberg_com)
                 f.write(bloomberg_com)
         elif user_input.rstrip(".com") == "nytimes":
@@ -74,7 +76,7 @@ while True:
             else:
                 stack.append(current_page)
                 current_page = nytimes_com
-            with open("./tb_tabs/" + user_input.rstrip(".com"), "w") as f:
+            with open("./{}/".format(folder) + user_input.rstrip(".com"), "w") as f:
                 print(nytimes_com)
                 f.write(nytimes_com)
         else:
