@@ -35,7 +35,19 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 '''
 
 # write your code here
+
 import os
+
+def createNewFolder(name="tb_tabs"):
+    """
+    Create a new folder with the given name or do nothing if folder with
+    the given name exists.
+    """
+    try:
+        os.mkdir(name)
+    except FileExistsError:
+        pass
+
 
 stack = []
 current_page = ""
@@ -43,18 +55,9 @@ current_page = ""
 while True:
     user_input = input()
     if "dir" in user_input:
-        dirName = user_input.split()[1]
-        try:
-            # Create target Directory
-            os.mkdir(dirName)
-        except FileExistsError:
-            pass
+        createNewFolder(user_input.split()[1])
     else:
-        try:
-            # Create target Directory
-            os.mkdir("tb_tabs")
-        except FileExistsError:
-            pass
+        createNewFolder()
     if user_input.count(".") > 0:
         if user_input.rstrip(".com") == "bloomberg":
             if current_page == "":
