@@ -1,3 +1,5 @@
+import os
+import requests
 
 nytimes_com = '''
 This New Liquid Is Magnetic, and Mesmerizing
@@ -36,7 +38,6 @@ Twitter and Square Chief Executive Officer Jack Dorsey
 
 # write your code here
 
-import os
 
 def createNewFolder(name="tb_tabs"):
     """
@@ -61,24 +62,14 @@ while True:
     else:
         createNewFolder()
     if user_input.count(".") > 0:
-        if user_input.rstrip(".com") == "bloomberg":
+        if "https://" not in user_input:
+            user_input = "https://" + user_input
             if current_page == "":
-                current_page = bloomberg_com
+                current_page = user_input
             else:
                 stack.append(current_page)
-                current_page = bloomberg_com
-            with open("./{}/".format(folder) + user_input.rstrip(".com"), "w") as f:
-                print(bloomberg_com)
-                f.write(bloomberg_com)
-        elif user_input.rstrip(".com") == "nytimes":
-            if current_page == "":
-                current_page = nytimes_com
-            else:
-                stack.append(current_page)
-                current_page = nytimes_com
-            with open("./{}/".format(folder) + user_input.rstrip(".com"), "w") as f:
-                print(nytimes_com)
-                f.write(nytimes_com)
+                current_page = user_input
+            r = requests.get(user_input)
         else:
             print("Error: Unknown URL")
     elif user_input == "back":
