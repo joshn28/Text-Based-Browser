@@ -70,6 +70,10 @@ while True:
                 stack.append(current_page)
                 current_page = user_input
             r = requests.get(user_input)
+            with open("./{}/".format(folder) + user_input[:len(user_input)-4].lstrip("https://").lstrip("www."), "w") \
+                    as f:
+                print(r.text)
+                f.write(r.text)
         else:
             print("Error: Unknown URL")
     elif user_input == "back":
