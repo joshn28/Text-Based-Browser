@@ -3,9 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 
 
-# write your code here
-
-
 def createNewFolder(name="tb_tabs"):
     """
     Create a new folder with the given name or do nothing if folder with
