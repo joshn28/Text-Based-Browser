@@ -2,8 +2,10 @@ import os
 import requests
 from bs4 import BeautifulSoup
 from colorama import Fore
+import re
 
-def createNewFolder(name="tb_tabs"):
+
+def create_new_folder(name="tb_tabs"):
     """
     Create a new folder with the given name or do nothing if folder with
     the given name exists.
@@ -14,6 +16,14 @@ def createNewFolder(name="tb_tabs"):
         pass
 
 
+def check_valid_domain_name(website):
+    """
+    :param website: website name
+    :return: true if website name matches with regular expression, else false
+    """
+    return re.search("(https:\/\/)*www.*\..*\.\w{2,}", website)
+
+
 stack = []
 current_page = ""
 
@@ -21,11 +31,12 @@ while True:
     user_input = input()
     folder = "tb_tabs"
     if "dir" in user_input:
-        createNewFolder(user_input.split()[1])
+        create_new_folder(user_input.split()[1])
         folder = user_input.split()[1]
+        user_input = user_input.split()[0]
     else:
-        createNewFolder()
-    if user_input.count(".") > 0:
+        create_new_folder()
+    if check_valid_domain_name(user_input):
         if "https://" not in user_input:
             user_input = "https://" + user_input
         if current_page == "":
