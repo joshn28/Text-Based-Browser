@@ -25,21 +25,21 @@ def check_valid_domain_name(website):
     return re.search("(https:\/\/)*.*\..*\.\w{2,}", website)
 
 
-def create_webpage_file(domain_name, current_folder):
+def create_webpage_file(url, current_folder, file_name):
     """
     Creates a new file named after the domain name and writes content from certain html tags into the file
-    :param domain_name: domain name
+    :param url: webpage address
     :param current_folder: the folder where the user wants the webpage to be stored
+    :param file_name: name of the file
     """
-    r = requests.get(domain_name)
+    r = requests.get(url)
     if r:
         soup = BeautifulSoup(r.content, 'html.parser')
         tags = ['p', 'a', 'ul', 'ol', 'li']
         web_page = []
         for tag in tags:
             web_page.extend(soup.find_all(tag))
-        website_name = domain_name[:len(domain_name) - 4].lstrip("https://").lstrip("www.")
-        with open("./{}/".format(current_folder) + website_name, "w") \
+        with open("./{}/{}".format(current_folder, file_name), "w") \
                 as f:
             for el in web_page:
                 if el.name == 'a':
@@ -47,7 +47,7 @@ def create_webpage_file(domain_name, current_folder):
                     print(Style.RESET_ALL)
                 else:
                     print(el.text)
-                f.write(el.text)
+                f.write(el.text.strip())
     else:
         print("Error: Unknown URL")
 
@@ -56,7 +56,7 @@ stack = []
 current_page = ""
 
 while True:
-    user_input = input("Enter a URL or make a new directory for the webpage: ")
+    user_input = input("Enter a URL or make a new directory for a webpage: ")
     folder = "tb_tabs"
     if "dir" in user_input:
         create_new_folder(user_input.split()[1])
@@ -72,7 +72,8 @@ while True:
         else:
             stack.append(current_page)
             current_page = user_input
-        create_webpage_file(user_input, folder)
+        m = re.match("(https:\/\/)*.*\.(.*)\.\w{2,}", user_input)
+        create_webpage_file(user_input, folder, m.group(2))
     elif user_input == "back":
         if len(stack) > 0:
             print(stack.pop())
