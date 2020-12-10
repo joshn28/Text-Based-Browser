@@ -1,11 +1,11 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from colorama import Fore
+from colorama import Fore, Style
 import re
 
 
-def create_new_folder(name="tb_tabs"):
+def create_new_folder(name):
     """
     Create a new folder with the given name or do nothing if folder with
     the given name exists.
@@ -22,13 +22,14 @@ def check_valid_domain_name(website):
     :param website: website name
     :return: true if website name matches with regular expression, else false
     """
-    return re.search("(https:\/\/)*www.*\..*\.\w{2,}", website)
+    return re.search("(https:\/\/)*.*\..*\.\w{2,}", website)
 
 
-def create_webpage_file(domain_name):
+def create_webpage_file(domain_name, current_folder):
     """
     Creates a new file named after the domain name and writes content from certain html tags into the file
     :param domain_name: domain name
+    :param current_folder: the folder where the user wants the webpage to be stored
     """
     r = requests.get(domain_name)
     if r:
@@ -38,11 +39,12 @@ def create_webpage_file(domain_name):
         for tag in tags:
             web_page.extend(soup.find_all(tag))
         website_name = domain_name[:len(domain_name) - 4].lstrip("https://").lstrip("www.")
-        with open("./{}/".format(folder) + website_name, "w") \
+        with open("./{}/".format(current_folder) + website_name, "w") \
                 as f:
             for el in web_page:
                 if el.name == 'a':
                     print(Fore.BLUE + el.text)
+                    print(Style.RESET_ALL)
                 else:
                     print(el.text)
                 f.write(el.text)
@@ -55,12 +57,13 @@ current_page = ""
 
 while True:
     user_input = input("Enter a URL or make a new directory for the webpage: ")
+    folder = "tb_tabs"
     if "dir" in user_input:
         create_new_folder(user_input.split()[1])
         folder = user_input.split()[1]
         user_input = user_input.split()[0]
     else:
-        create_new_folder()
+        create_new_folder(folder)
     if check_valid_domain_name(user_input):
         if "https://" not in user_input:
             user_input = "https://" + user_input
@@ -69,7 +72,7 @@ while True:
         else:
             stack.append(current_page)
             current_page = user_input
-        create_webpage_file(user_input)
+        create_webpage_file(user_input, folder)
     elif user_input == "back":
         if len(stack) > 0:
             print(stack.pop())
