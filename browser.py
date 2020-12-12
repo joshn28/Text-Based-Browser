@@ -53,28 +53,37 @@ def create_webpage_file(url, current_folder, file_name):
         print("Error: Unknown URL")
 
 
+def get_domain_name(website):
+    """
+    :param website: website name
+    :return: the domain name
+    """
+    m = re.match("(https:\/\/)*.*\.(.*)\.\w{2,}", website)
+    return m.group(2)
+
+
 stack = []
 current_page = ""
 
 while True:
-    user_input = input("Enter a URL or make a new directory for a webpage: ")
+    user_input = input("Enter a URL: ")
     folder = "tb_tabs"
     if "dir" in user_input:
-        create_new_folder(user_input.split()[1])
-        folder = user_input.split()[1]
-        user_input = user_input.split()[0]
-    else:
+        user_input = get_domain_name(user_input.split()[1])
+        create_new_folder(user_input)
+        folder = user_input
+    elif "dir" not in user_input:
         create_new_folder(folder)
-    if check_valid_domain_name(user_input):
-        if "https://" not in user_input:
-            user_input = "https://" + user_input
-        if current_page == "":
-            current_page = user_input
-        else:
-            stack.append(current_page)
-            current_page = user_input
-        m = re.match("(https:\/\/)*.*\.(.*)\.\w{2,}", user_input)
-        create_webpage_file(user_input, folder, m.group(2))
+        if check_valid_domain_name(user_input):
+            if "https://" not in user_input:
+                user_input = "https://" + user_input
+            if current_page == "":
+                current_page = user_input
+            else:
+                stack.append(current_page)
+                current_page = user_input
+            website_name = get_domain_name(user_input)
+            create_webpage_file(user_input, folder, website_name)
     elif user_input == "back":
         if len(stack) > 0:
             print(stack.pop())
