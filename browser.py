@@ -72,18 +72,18 @@ while True:
         user_input = get_domain_name(user_input.split()[1])
         create_new_folder(user_input)
         folder = user_input
-    elif "dir" not in user_input:
+    else:
         create_new_folder(folder)
-        if check_valid_domain_name(user_input):
-            if "https://" not in user_input:
-                user_input = "https://" + user_input
-            if current_page == "":
-                current_page = user_input
-            else:
-                stack.append(current_page)
-                current_page = user_input
-            website_name = get_domain_name(user_input)
-            create_webpage_file(user_input, folder, website_name)
+    if "dir" not in user_input and check_valid_domain_name(user_input):
+        if "https://" not in user_input:
+            user_input = "https://" + user_input
+        if current_page == "":
+            current_page = user_input
+        else:
+            stack.append(current_page)
+            current_page = user_input
+        website_name = get_domain_name(user_input)
+        create_webpage_file(user_input, folder, website_name)
     elif user_input == "back":
         if len(stack) > 0:
             print(stack.pop())
