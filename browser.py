@@ -9,6 +9,7 @@ def create_new_folder(name):
     """
     Create a new folder with the given name or do nothing if folder with
     the given name exists.
+    :param name: file name for the webpage
     """
     try:
         os.mkdir(name)
