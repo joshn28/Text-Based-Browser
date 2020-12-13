@@ -66,15 +66,16 @@ stack = []
 current_page = ""
 
 while True:
-    user_input = input("Enter a URL: ")
+    user_input = input("Enter a URL or name of new folder: ")
     folder = "tb_tabs"
     if "dir" in user_input:
-        user_input = get_domain_name(user_input.split()[1])
-        create_new_folder(user_input)
-        folder = user_input
+        folder = get_domain_name(user_input.split()[1])
+        create_new_folder(folder)
+        print("Success! Created {} folder.".format(folder))
     else:
         create_new_folder(folder)
     if "dir" not in user_input and check_valid_domain_name(user_input):
+        user_input = get_domain_name(user_input)
         if "https://" not in user_input:
             user_input = "https://" + user_input
         if current_page == "":
@@ -89,5 +90,5 @@ while True:
             print(stack.pop())
     elif user_input == "exit":
         break
-    else:
+    elif "dir" not in user_input and not check_valid_domain_name(user_input):
         print("Error: Invalid URL")
